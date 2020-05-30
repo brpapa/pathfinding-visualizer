@@ -1,0 +1,47 @@
+{
+  "name": "pathfinding-visualizer",
+  "homepage": "https://pathfinding.now.sh",
+  "author": {
+    "name": "Bruno Papa",
+    "email": "bruno.papa@hotmail.com"
+  },
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "styled-components": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/react": "^16.9.32",
+    "@types/react-dom": "^16.9.6",
+    "@types/react-router-dom": "^5.1.4",
+    "@types/styled-components": "^5.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.19.0",
+    "react-scripts": "3.4.0",
+    "ts-jest": "^25.5.0",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "jest --no-cache",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
