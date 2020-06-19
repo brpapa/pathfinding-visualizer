@@ -4,3 +4,5 @@ build
 
 *.xd
 *.DS_Store
+
+_*

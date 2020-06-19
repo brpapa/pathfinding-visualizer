@@ -1,0 +1,42 @@
+/* TODO: https://css-tricks.com/transforms-on-svg-elements/ */
+
+.node {
+  stroke-width: 1;
+  stroke: rgba(195, 195, 195, 0.4);
+
+  /* transition: fill 0.3s ease-in-out 0s; */
+
+  transform-box: fill-box;
+  transform-origin: center;
+  /* cursor: pointer; */
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+// .unvisited {}
+
+.source, .target {
+  cursor: grab; /* TODO: mudar para grabbing enquanto estiver clicado */
+}
+
+.visited {
+  animation-name: scaleUp;
+  animation-timing-function: ease-in-out;
+  animation-duration: 0.4s;
+}
+
+/* visited -> solution */
+.solution {
+  transition: 0.1s ease-in-out 0s;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,6 +1,5 @@
 import { Comparator } from './../types'
 
-// fonte da verdade do tipo DataStructure
 export abstract class DataStructure<T> {
   protected arr: T[]
 
@@ -15,10 +14,9 @@ export abstract class DataStructure<T> {
     return this.arr.length === 0
   }
 
-  // funções abaixo devem "terminar" de serem implementadas pelas classes filhas
+  // funções que devem "terminar" de serem implementadas pelas classes filhas
   top(): T | undefined {
-    if (this.empty())
-      return undefined
+    if (this.empty()) return undefined
   }
   pop(): void {
     if (this.empty()) {
@@ -53,7 +51,7 @@ export class Queue<T> extends DataStructure<T> {
   }
 }
 export class BinaryHeap<T> extends DataStructure<T> {
-  // convenção de nome dos nós: se u -> v, u é pai e v é filho
+  // convenção de nome dos nós: u -> v (u é pai e v é filho)
 
   /**
    * se eu quero maximizar, cmp(1, 2) deve retornar false, por exemplo
@@ -62,35 +60,35 @@ export class BinaryHeap<T> extends DataStructure<T> {
   constructor(private cmp: Comparator<T>) {
     super()
   }
-  
+
   // retorna o nó pai de v, e se v já é a raiz, retorna -1
-  private parent = (v: number) => (v === 0) ? (-1) : ((v-2 + (v%2)) / 2)
+  private parent = (v: number) => (v === 0 ? -1 : (v - 2 + (v % 2)) / 2)
   // retorna o nó filho à esquerda de u
-  private leftChild = (u: number) => 2*u+1
+  private leftChild = (u: number) => 2 * u + 1
   // retorna o nó filho à direita de u
   private rightChild = (u: number) => 2 * u + 2
-  
+
   // re-organiza a sub-árvore enraizada pelo nó u
   private heapifyDown(u: number) {
     const { arr, cmp, leftChild, rightChild } = this
 
     let w = u // worst node to now
-    let l = leftChild(u)
-    let r = rightChild(u)
+    const l = leftChild(u)
+    const r = rightChild(u)
 
     if (l < arr.length && !cmp(arr[w], arr[l])) w = l
     if (r < arr.length && !cmp(arr[w], arr[r])) w = r
-    
+
     if (w !== u) {
       [arr[w], arr[u]] = [arr[u], arr[w]] // swap
       this.heapifyDown(w)
     }
   }
-  // re-organiza o caminho do nó folha v até a raiz
+  // re-organiza o caminho do nó folha v até a raiz 0
   private heapifyUp(v: number) {
     const { arr, parent, cmp } = this
 
-    let u = parent(v)
+    const u = parent(v)
 
     if (u >= 0 && !cmp(arr[u], arr[v])) {
       [arr[u], arr[v]] = [arr[v], arr[u]] // swap
@@ -101,7 +99,7 @@ export class BinaryHeap<T> extends DataStructure<T> {
   // O(log(n))
   push(item: T) {
     this.arr.push(item) // increase arr length
-    this.heapifyUp(this.arr.length-1)
+    this.heapifyUp(this.arr.length - 1)
   }
   // O(1)
   top() {
@@ -111,7 +109,7 @@ export class BinaryHeap<T> extends DataStructure<T> {
   // O(log(n))
   pop() {
     super.pop()
-    const last = this.arr.pop()  // decrease arr length
+    const last = this.arr.pop() // decrease arr length
     if (last) this.arr[0] = last // overwrite root
     this.heapifyDown(0)
   }
