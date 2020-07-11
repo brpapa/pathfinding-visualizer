@@ -16,25 +16,20 @@ export const initialDelay = 80
 export function getInitialState(grid: GridTypeNames): State {
   return {
     isUpdating: false,
+    availButton: 'start',
     source: getInitialSource(),
     target: getInitialTarget(grid),
-    gridItems: getInitialGridItems(
-      grid,
-      getInitialSource(),
-      getInitialTarget(grid)
-    ),
+    gridItems: getInitialGridItems(grid),
   }
 }
 
 /* */
 
 // retorna gridItems[x][y] inicializado, onde (x,y) >= (0,0) e (x,y) < QTY_GRID_ITEMS[grid]
-function getInitialGridItems(
-  grid: GridTypeNames,
-  source: AgentState,
-  target: AgentState
-): GridItemStatus[][] {
+function getInitialGridItems(grid: GridTypeNames): GridItemStatus[][] {
   const { width: x, height: y } = QTY_GRID_ITEMS[grid]
+  const source = getInitialSource()
+  const target = getInitialTarget(grid)
 
   const items = [...Array(x)].map(() => Array(y).fill('unvisited'))
   items[source.x][source.y] = 'source'
@@ -44,7 +39,7 @@ function getInitialGridItems(
 }
 
 function getInitialSource() {
-  return { x: 0, y: 0 }
+  return { x: 5, y: 5 }
 }
 function getInitialTarget(grid: GridTypeNames) {
   return {

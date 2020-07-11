@@ -38,15 +38,12 @@ export const Pathfinder = () => {
     () => {
       const update = pendingUpdate.current
       if (!update) {
-        dispath({ type: 'pause' })
+        dispath({ type: 'stop' })
         return
       }
       dispath({
         type: 'update-grid-items',
-        payload: {
-          agentStates: update.agentStates,
-          newStatus: update.newStatus,
-        },
+        payload: update,
       })
       pendingUpdate.current = update.next
     },
@@ -54,7 +51,7 @@ export const Pathfinder = () => {
   )
 
   useEffect(() => {
-    handleReset()
+    dispath({ type: 'reset', payload: { grid } })
   }, [grid])
 
   function handleStart() {
@@ -68,25 +65,16 @@ export const Pathfinder = () => {
       qtyVisited: ans.history.reduce((acc, curr) => acc + curr.length, 0),
       cost: ans.solution.reduce((acc, curr) => acc + curr.length, 0),
     }
+    // sobrescreve pendencias anteriores, se houver
     pendingUpdate.current = convertToUpdatesLinkedList(
       ans.history,
       ans.solution
     )
   }
 
-  // preciso setar pendingUpdate como null para alterar os botoes disponiveis
-  function handleReset() {
-    dispath({ type: 'reset', payload: { grid } })
-    pendingUpdate.current = null
-  }
-  function handleClear() {
-    dispath({ type: 'clear' })
-    pendingUpdate.current = null
-  }
-
   return (
     <div>
-      {/* TODO: desabilitar um input enquando estiver atualizando */}
+      {/* TODO: desabilitar o input change-grid enquando estiver atualizando */}
       <form
         className='container'
         style={{ paddingTop: '8px', paddingBottom: '14px' }}
@@ -124,14 +112,23 @@ export const Pathfinder = () => {
                   value.name,
                 ])}
               />
-              {
-                // prettier-ignore
-                !state.isUpdating
-                ? pendingUpdate.current === null
-                  ? <Button primary label='start' onClick={handleStart} />
-                  : <Button primary label='continue' onClick={() => dispath({ type: 'continue' })} />
-                : <Button primary label='pause' onClick={() => dispath({ type: 'pause' })} />
-              }
+              {state.availButton === 'start' && (
+                <Button primary label='start' onClick={handleStart} />
+              )}
+              {state.availButton === 'continue' && (
+                <Button
+                  primary
+                  label='continue'
+                  onClick={() => dispath({ type: 'continue' })}
+                />
+              )}
+              {state.availButton === 'pause' && (
+                <Button
+                  primary
+                  label='pause'
+                  onClick={() => dispath({ type: 'pause' })}
+                />
+              )}
             </Group>
           </div>
           <div className='col-md-auto'>
@@ -147,12 +144,12 @@ export const Pathfinder = () => {
               <Button
                 label='Reset'
                 title='Clear all nodes, except the source and target'
-                onClick={handleReset}
+                onClick={() => dispath({ type: 'reset', payload: { grid } })}
               />
               <Button
                 label='Clear'
                 title='Clear all nodes, except walls, source and target'
-                onClick={handleClear}
+                onClick={() => dispath({ type: 'clear' })}
               />
             </Group>
           </div>
@@ -164,7 +161,7 @@ export const Pathfinder = () => {
         onToggleGridItem={(id) =>
           dispath({
             type: 'toggle-grid-item',
-            payload: { id, hasPending: pendingUpdate.current !== null },
+            payload: { id },
           })
         }
       />

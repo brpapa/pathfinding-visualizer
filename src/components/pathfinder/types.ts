@@ -4,13 +4,14 @@ import { GridItemStatus, AgentState, GridTypeNames } from './../../types'
 export type State = {
   gridItems: GridItemStatus[][]
   isUpdating: boolean
+  availButton: 'start' | 'pause' | 'continue'
   source: AgentState
   target: AgentState
 }
 // reducer
 export type Action =
   | {
-      type: 'pause' | 'continue' | 'clear'
+      type: 'pause' | 'continue' | 'clear' | 'stop'
     }
   | {
       type: 'reset'
@@ -22,7 +23,6 @@ export type Action =
       type: 'toggle-grid-item'
       payload: {
         id: AgentState
-        hasPending: boolean
       }
     }
   | {

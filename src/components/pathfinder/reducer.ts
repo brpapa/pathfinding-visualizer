@@ -11,18 +11,28 @@ export default (prev: State, action: Action): State => {
       return {
         ...prev,
         isUpdating: false,
+        availButton: 'continue',
       }
     }
     case 'continue': {
       return {
         ...prev,
         isUpdating: true,
+        availButton: 'pause',
+      }
+    }
+    case 'stop': {
+      return {
+        ...prev,
+        isUpdating: false,
+        availButton: 'start',
       }
     }
     case 'clear': {
       return {
         ...prev,
         isUpdating: false,
+        availButton: 'start',
         gridItems: prev.gridItems.map((items) =>
           items.map((item) =>
             item === 'source' || item === 'target' || item === 'wall'
@@ -33,7 +43,8 @@ export default (prev: State, action: Action): State => {
       }
     }
     case 'toggle-grid-item': {
-      if (action.payload?.hasPending) return prev
+      // ainda tem pendencias
+      if (prev.availButton === 'continue') return prev
 
       return {
         ...prev,

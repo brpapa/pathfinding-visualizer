@@ -3,7 +3,7 @@ import { GridTypeNames } from '../types'
 type TForEachGrid<T> = { [K in GridTypeNames]: T }
 type TDimension = { width: number; height: number }
 
-// TODO: re-renderizar o svg quando ela mudar para suportar um resize da tela em runtime, mas lembre-se que quem depende dessas contantes são: pathfinder/utils, grid/index, grid-item/utils; usar useContext?
+// TODO: re-renderizar o svg quando ela mudar para suportar um resize da tela em runtime, mas lembre-se que quem depende dessas contantes são: pathfinder/config, grid/index, grid-item/utils; usar useContext?
 
 const SIDE_GRID_ITEM: TForEachGrid<number> = {
   triangle: 60, // pixels
