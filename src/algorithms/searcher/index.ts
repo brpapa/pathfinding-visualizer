@@ -1,6 +1,6 @@
 import { getCreateFrontier } from './frontiers'
 import { createNeighbors, createVisited, isEqual } from './utils'
-import { StatusGridItem } from './../../types'
+import { GridItemStatus } from './../../types'
 import {
   AgentState,
   SearchAlgoNames,
@@ -85,7 +85,7 @@ class Searcher {
 export function createSearcher(
   grid: GridTypeNames,
   searchAlgo: SearchAlgoNames,
-  gridItems: StatusGridItem[][]
+  gridItems: GridItemStatus[][] // entende que apenas se não for 'wall' é livre pra visitar
 ) {
   const createFrontier = getCreateFrontier(searchAlgo)
   const visited = createVisited(gridItems.length, gridItems[0].length)

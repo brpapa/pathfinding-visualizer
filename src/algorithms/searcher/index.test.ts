@@ -1,9 +1,9 @@
 import { createSearcher } from './index'
-import { StatusGridItem } from '../../types'
+import { GridItemStatus } from '../../types'
 
 describe('searchers for a square grid', () => {
   const max = { x: 4, y: 4 }
-  const visitable: StatusGridItem[][] = [...Array(max.x + 1)].map(() =>
+  const visitable: GridItemStatus[][] = [...Array(max.x + 1)].map(() =>
     Array(max.y + 1).fill('unvisited')
   )
 

@@ -1,0 +1,67 @@
+// TODO: https://css-tricks.com/transforms-on-svg-elements/
+
+$color-unvisited: #fff;
+$color-visited: #656bff;
+// $color-visited: #2838E2; // o certo seria uma cor não mto chamativa
+$color-solution: #00ffbb;
+// $color-solution: #00FFFF;
+$color-wall: #333333;
+$color-source: #ff8c5f;
+$color-target: #e85a7e;
+
+.node {
+  stroke-width: 1;
+  stroke: rgba(195, 195, 195, 0.4);
+
+  // transition: fill 0.3s ease-in-out 0s;
+
+  transform-box: fill-box;
+  transform-origin: center;
+  // cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.node-unvisited {
+  fill: $color-unvisited;
+}
+.node-visited {
+  fill: $color-visited;
+  // unvisited -> visited
+  animation-name: scale-up;
+  animation-timing-function: ease-in-out;
+  animation-duration: 0.9s;
+}
+.node-solution {
+  fill: $color-solution;
+  // visited -> solution
+  transition: 0.1s ease-in-out 0s;
+}
+.node-wall {
+  fill: $color-wall;
+}
+.node-source {
+  fill: $color-source;
+  // cursor: grab; TODO: mudar para grabbing enquanto estiver clicado
+}
+.node-target {
+  fill: $color-target;
+  // cursor: grab; TODO: mudar para grabbing enquanto estiver clicado
+}
+
+@keyframes scale-up {
+  0% {
+    transform: scale(0);
+    fill: $color-solution;
+  }
+  10% {
+    transform: scale(1);
+    fill: $color-solution;
+  }
+  20% {
+  }
+  100% {
+  }
+}

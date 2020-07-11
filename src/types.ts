@@ -10,7 +10,7 @@ export type AgentState = {
 
 export type GridTypeNames = 'square' | 'triangle'
 
-export type StatusGridItem =
+export type GridItemStatus =
   | 'unvisited'
   | 'visited'
   | 'solution'
