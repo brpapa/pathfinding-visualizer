@@ -1,8 +1,10 @@
-import React from 'react'
+//TODO: inserir animacao do rabinho no hover
+
+import React, { FC } from 'react'
 
 // a link on top right corner
-export const GithubCorner: React.FunctionComponent<{
-  link: string
+const GithubCorner: FC<{
+  href: string
 }> = (props) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
@@ -12,7 +14,7 @@ export const GithubCorner: React.FunctionComponent<{
     style={{ position: 'fixed', right: 0 }}
   >
     <a
-      href={props.link}
+      href={props.href}
       target='_blank'
       rel='noopener noreferrer'
       aria-label='View source code on Github'
@@ -32,3 +34,5 @@ export const GithubCorner: React.FunctionComponent<{
     </a>
   </svg>
 )
+
+export default GithubCorner

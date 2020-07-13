@@ -1,6 +1,7 @@
 import { GridItemStatus, AgentState, GridTypeNames } from './../../types'
 
-// reducer
+/* reducer */
+
 export type State = {
   gridItems: GridItemStatus[][]
   isUpdating: boolean
@@ -8,30 +9,23 @@ export type State = {
   source: AgentState
   target: AgentState
 }
-// reducer
+
+type Act<T> = { type: T }
+type ActWithPayload<T, P> = Act<T> & { payload: P }
+
 export type Action =
-  | {
-      type: 'pause' | 'continue' | 'clear' | 'stop'
-    }
-  | {
-      type: 'reset'
-      payload: {
-        grid: GridTypeNames
-      }
-    }
-  | {
-      type: 'toggle-grid-item'
-      payload: {
-        id: AgentState
-      }
-    }
-  | {
-      type: 'update-grid-items'
-      payload: {
+  | Act<'pause' | 'continue' | 'clear' | 'stop'>
+  | ActWithPayload<'reset', { grid: GridTypeNames }>
+  | ActWithPayload<'toggle-grid-item', { id: AgentState }>
+  | ActWithPayload<
+      'update-grid-items',
+      {
         agentStates: AgentState[]
         newStatus: GridItemStatus
       }
-    }
+    >
+
+/* outros */
 
 export type UpdatesLinkedList = {
   agentStates: AgentState[] // de um mesmo nível

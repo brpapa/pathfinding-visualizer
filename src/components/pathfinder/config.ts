@@ -25,7 +25,7 @@ export function getInitialState(grid: GridTypeNames): State {
 
 /* */
 
-// retorna gridItems[x][y] inicializado, onde (x,y) >= (0,0) e (x,y) < QTY_GRID_ITEMS[grid]
+// retorna gridItems[x][y], onde (x,y) >= (0,0) e (x,y) < QTY_GRID_ITEMS[grid]
 function getInitialGridItems(grid: GridTypeNames): GridItemStatus[][] {
   const { width: x, height: y } = QTY_GRID_ITEMS[grid]
   const source = getInitialSource()
@@ -39,11 +39,11 @@ function getInitialGridItems(grid: GridTypeNames): GridItemStatus[][] {
 }
 
 function getInitialSource() {
-  return { x: 5, y: 5 }
+  return { x: 2, y: 2 }
 }
 function getInitialTarget(grid: GridTypeNames) {
   return {
-    x: QTY_GRID_ITEMS[grid].width - 5,
-    y: QTY_GRID_ITEMS[grid].height - 5,
+    x: QTY_GRID_ITEMS[grid].width-1 - 2,
+    y: QTY_GRID_ITEMS[grid].height-1 - 2,
   }
 }

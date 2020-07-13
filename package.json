@@ -11,7 +11,9 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "bootstrap": "^5.0.0-alpha1",
+    "@styled-icons/ionicons-outline": "^10.6.0",
+    "@styled-icons/ionicons-sharp": "^10.6.0",
+    "@styled-icons/ionicons-solid": "^10.6.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "styled-components": "^5.0.1"

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useReducer, useEffect } from 'react'
 
 import { UpdatesLinkedList } from './types'
+import { SearchAlgoNames, GridItemStatus } from '../../types'
+import { GridTypeNames } from '../../algorithms/types'
 
 import data from './data'
 import reducer from './reducer'
@@ -13,20 +15,27 @@ import {
 } from './config'
 import { convertToUpdatesLinkedList } from './utils'
 
+import { Grid } from '../grid'
+
 import { createSearcher } from '../../algorithms/searcher'
 import { useInterval } from '../../hooks'
 
-import { Grid } from '../grid'
 import { InputRange as Range } from '../../ui/input-range'
 import { InputButton as Button } from '../../ui/input-button'
 import { InputSelect as Select } from '../../ui/input-select'
 import { InputGroup as Group } from '../../ui/input-group'
 
-export const Pathfinder = () => {
-  // state principal
+import { Tabs, Tab } from './../../ui/tabs'
+import { ReactComponent as TriangleIcon } from './../../assets/icons/triangle.svg'
+import { ReactComponent as TriangleOutlineIcon } from './../../assets/icons/triangle-outline.svg'
+import { ReactComponent as SquareIcon } from './../../assets/icons/square.svg'
+import { ReactComponent as SquareOutlineIcon } from './../../assets/icons/square-outline.svg'
+
+export default () => {
+  // main state
   const [state, dispath] = useReducer(reducer, getInitialState(initialGrid))
 
-  // states do form
+  // states inputed by user
   const [grid, setGrid] = useState(initialGrid)
   const [searchAlgo, setSearchAlgo] = useState(initialSearchAlgo)
   const [delay, setDelay] = useState(initialDelay)
@@ -34,13 +43,15 @@ export const Pathfinder = () => {
   const solution = useRef({ qtyVisited: 0, cost: 0 })
   const pendingUpdate = useRef<UpdatesLinkedList>(null)
 
+  // executa a cb enquanto isUpdating e pendingUpdate.current !== null
   useInterval(
     () => {
       const update = pendingUpdate.current
-      if (!update) {
+      if (update === null) {
         dispath({ type: 'stop' })
         return
       }
+
       dispath({
         type: 'update-grid-items',
         payload: update,
@@ -50,6 +61,7 @@ export const Pathfinder = () => {
     state.isUpdating ? delay : null
   )
 
+  // reseta após o grid mudar
   useEffect(() => {
     dispath({ type: 'reset', payload: { grid } })
   }, [grid])
@@ -61,11 +73,11 @@ export const Pathfinder = () => {
     const searcher = createSearcher(grid, searchAlgo, state.gridItems)
     const ans = searcher.solve(state.source, state.target)
 
+    // sobrescreve solution/pendingUpdate anteriores, se houver
     solution.current = {
       qtyVisited: ans.history.reduce((acc, curr) => acc + curr.length, 0),
       cost: ans.solution.reduce((acc, curr) => acc + curr.length, 0),
     }
-    // sobrescreve pendencias anteriores, se houver
     pendingUpdate.current = convertToUpdatesLinkedList(
       ans.history,
       ans.solution
@@ -74,86 +86,73 @@ export const Pathfinder = () => {
 
   return (
     <div>
-      {/* TODO: desabilitar o input change-grid enquando estiver atualizando */}
+      {/* TODO: separar o formulario em um componente separado */}
       <form
         className='container'
         style={{ paddingTop: '8px', paddingBottom: '14px' }}
         onSubmit={(e) => e.preventDefault()}
       >
-        <div className='row align-items-center'>
-          <div className='col-md-auto'>
-            {/* TODO: mudar para um grupo de botoes radio, rotulados com icones de triangulo e um quadrado, https://codepen.io/brnpapa/pen/xxZwPgE, https://v5.getbootstrap.com/docs/5.0/forms/checks/#radio-toggle-buttons, https://icons.getbootstrap.com/icons/triangle-fill/, https://icons.getbootstrap.com/icons/triangle-half/, https://icons.getbootstrap.com/icons/triangle/, https://icons.getbootstrap.com/icons/square-fill/, https://icons.getbootstrap.com/icons/square-half/, https://icons.getbootstrap.com/icons/square/ */}
+        <Tabs
+          defaultValue={grid}
+          onChange={(value) => setGrid(value as GridTypeNames)}
+        >
+          <Tab
+            value='triangle'
+            Icon={<TriangleIcon width={26} />}
+            SelectedIcon={<TriangleOutlineIcon width={26} />}
+          />
+          <Tab
+            value='square'
+            Icon={<SquareIcon width={26} />}
+            SelectedIcon={<SquareOutlineIcon width={26} />}
+          />
+        </Tabs>
+        <Group>
+          <Select
+            defaultValue={searchAlgo}
+            title='pick a search algorithm'
+            onChange={(e) => setSearchAlgo(e.target.value as SearchAlgoNames)}
+            options={Object.entries(data).map(([key, value]) => [
+              key,
+              value.name,
+            ])}
+          />
+          {state.availButton === 'start' && (
+            <Button primary label='start' onClick={handleStart} />
+          )}
+          {state.availButton === 'continue' && (
             <Button
-              label='Change grid'
-              title={`Change to another grid`}
-              onClick={() =>
-                setGrid((prev) => (prev === 'triangle' ? 'square' : 'triangle'))
-              }
+              primary
+              label='continue'
+              onClick={() => dispath({ type: 'continue' })}
             />
-          </div>
-          <div className='col'>
-            <Group>
-              <Select
-                defaultValue={searchAlgo}
-                title='pick a search algorithm'
-                onChange={(e) => {
-                  const searchAlgo = e.target.value
-                  // TODO: melhorar, mas nao sei como, pois os tipos nao existem em runtime
-                  if (
-                    searchAlgo === 'breadth-first' ||
-                    searchAlgo === 'depth-first' ||
-                    searchAlgo === 'greedy best-first' ||
-                    searchAlgo === 'a-star'
-                  )
-                    setSearchAlgo(searchAlgo)
-                }}
-                options={Object.entries(data).map(([key, value]) => [
-                  key,
-                  value.name,
-                ])}
-              />
-              {state.availButton === 'start' && (
-                <Button primary label='start' onClick={handleStart} />
-              )}
-              {state.availButton === 'continue' && (
-                <Button
-                  primary
-                  label='continue'
-                  onClick={() => dispath({ type: 'continue' })}
-                />
-              )}
-              {state.availButton === 'pause' && (
-                <Button
-                  primary
-                  label='pause'
-                  onClick={() => dispath({ type: 'pause' })}
-                />
-              )}
-            </Group>
-          </div>
-          <div className='col-md-auto'>
-            <Range
-              {...delayConfig}
-              value={delay}
-              label='delay'
-              onChange={(e) => setDelay(Number(e.target.value))}
+          )}
+          {state.availButton === 'pause' && (
+            <Button
+              primary
+              label='pause'
+              onClick={() => dispath({ type: 'pause' })}
             />
-          </div>
-          <div className='col-md-auto'>
-            <Group>
-              <Button
-                label='Reset'
-                title='Clear all nodes, except the source and target'
-                onClick={() => dispath({ type: 'reset', payload: { grid } })}
-              />
-              <Button
-                label='Clear'
-                title='Clear all nodes, except walls, source and target'
-                onClick={() => dispath({ type: 'clear' })}
-              />
-            </Group>
-          </div>
-        </div>
+          )}
+        </Group>
+        <Range
+          {...delayConfig}
+          value={delay}
+          label='delay'
+          onChange={(e) => setDelay(Number(e.target.value))}
+        />
+        <Group>
+          <Button
+            label='Reset'
+            title='Clear all nodes, except the source and target'
+            onClick={() => dispath({ type: 'reset', payload: { grid } })}
+          />
+          <Button
+            label='Clear'
+            title='Clear all nodes, except walls, source and target'
+            onClick={() => dispath({ type: 'clear' })}
+          />
+        </Group>
       </form>
       <Grid
         type={grid}

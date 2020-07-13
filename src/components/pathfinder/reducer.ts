@@ -43,7 +43,7 @@ export default (prev: State, action: Action): State => {
       }
     }
     case 'toggle-grid-item': {
-      // ainda tem pendencias
+      // ignora se ainda tiver pendencias para atualizar
       if (prev.availButton === 'continue') return prev
 
       return {

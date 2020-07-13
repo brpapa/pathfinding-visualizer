@@ -1,7 +1,6 @@
 import { UpdatesLinkedList } from './types'
 import { AgentState } from './../../types'
 
-// TODO: não incluir o state que é o próprio target, tanto em visited como em solution
 export const convertToUpdatesLinkedList = (
   visited: AgentState[][],
   solution: AgentState[][]

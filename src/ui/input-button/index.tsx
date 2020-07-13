@@ -2,6 +2,7 @@ import React from 'react'
 
 export const InputButton: React.FunctionComponent<{
   label: string
+  disabled?: boolean
   title?: string
   primary?: boolean
   onClick?: () => void
@@ -9,7 +10,10 @@ export const InputButton: React.FunctionComponent<{
   return (
     <button
       type='button'
-      className={`btn ${props.primary ? 'btn-dark' : 'btn-outline-dark'} btn-sm`}
+      disabled={props.disabled}
+      className={`btn ${
+        props.primary ? 'btn-dark' : 'btn-outline-dark'
+      } btn-sm`}
       onClick={props.onClick}
       title={props.title} // TODO: mudar, renderizar uma nova box (tooltip) no :hover para aparecer imediatamente esse texto, definir essa box com um dark blur background; (background-color: rgba(245,245,247,0.72); backdrop-filter: saturate(180%) blur(20px); (https://css-tricks.com/almanac/properties/b/backdrop-filter/) (https://v5.getbootstrap.com/docs/5.0/components/tooltips/)
     >

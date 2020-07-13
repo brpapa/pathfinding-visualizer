@@ -6,6 +6,8 @@ import * as Utils from './utils'
 
 // TODO: se o grid item for source/target, arrastá-lo, mas sem drag and drop, usar onMouseEnter e onMouseLeave um anulando o outro
 // TODO: renderizar por cima em caso de mudanca de status para animar do jeito que quero, usando ::after ou ::before
+  
+// TODO: o status deve poder ser ao mesmo tempo unvisited/visited/solution/wall E source/target
 export const GridItem: FC<{
   id: AgentState
   grid: GridTypeNames
