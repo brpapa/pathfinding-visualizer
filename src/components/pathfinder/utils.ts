@@ -1,4 +1,4 @@
-import { UpdatesLinkedList } from './types'
+import { UpdatesLinkedList } from '../types'
 import { AgentState } from './../../types'
 
 export const convertToUpdatesLinkedList = (

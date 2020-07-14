@@ -4,17 +4,19 @@ import './styles.scss'
 import { AgentState, GridItemStatus, GridTypeNames } from '../../types'
 import * as Utils from './utils'
 
-// TODO: se o grid item for source/target, arrastá-lo, mas sem drag and drop, usar onMouseEnter e onMouseLeave um anulando o outro
-// TODO: renderizar por cima em caso de mudanca de status para animar do jeito que quero, usando ::after ou ::before
-  
-// TODO: o status deve poder ser ao mesmo tempo unvisited/visited/solution/wall E source/target
-export const GridItem: FC<{
+type GridItemProps = {
   id: AgentState
   grid: GridTypeNames
   status: GridItemStatus
   getMouseIsPressed: () => boolean
   onToggle: (id: AgentState) => void
-}> = (props) => {
+}
+
+// TODO: se o grid item for source/target, arrastá-lo, mas sem drag and drop, usar onMouseEnter e onMouseLeave um anulando o outro
+// TODO: renderizar por cima em caso de mudanca de status para animar do jeito que quero, usando ::after ou ::before
+  
+// TODO: o status deve poder ser ao mesmo tempo unvisited/visited/solution/wall E source/target
+const GridItem: FC<GridItemProps> = (props) => {
   
   const commonChildProps = {
     className: ['node', `node-${props.status}`].join(' '),
@@ -56,4 +58,5 @@ export const GridItem: FC<{
   )
 }
 
+export default GridItem
 export const MemoizedGridItem = React.memo(GridItem)

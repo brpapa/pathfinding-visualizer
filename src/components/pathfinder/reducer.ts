@@ -1,7 +1,7 @@
-import { State, Action } from './types'
+import { State, Action } from '../types'
 import { getInitialState } from './config'
 
-// a partir do state atual e uma action, retorna o novo state
+// receives the current state and an action, returns the new state
 export default (prev: State, action: Action): State => {
   switch (action.type) {
     case 'reset': {
@@ -43,7 +43,7 @@ export default (prev: State, action: Action): State => {
       }
     }
     case 'toggle-grid-item': {
-      // ignora se ainda tiver pendencias para atualizar
+      // ignore if still have pendingUpdates
       if (prev.availButton === 'continue') return prev
 
       return {

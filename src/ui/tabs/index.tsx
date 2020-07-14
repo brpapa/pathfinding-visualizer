@@ -13,7 +13,7 @@ import styled from 'styled-components'
 const biggerBorderRadius = '1.6em'
 const smallerBorderRadius = '1.2em'
 
-interface TabsProps {
+type TabsProps = {
   defaultValue: string
   onChange: (value: string) => void
   children: React.ReactElement<TabProps>[] // necessário p/ que child sejá válido dentro de React.Children.map
@@ -28,8 +28,8 @@ export const Tabs: FC<TabsProps> = ({ defaultValue, onChange, children }) => {
   // adiciona novas props em todos os filhos, antes de renderizá-los
   const childElements = React.Children.map(children, (child) =>
     React.cloneElement(child, {
-      selected: child.props.value === value,
-      onSelect: (value: string) => {
+      checked: child.props.value === value,
+      onCheck: (value: string) => {
         setValue(value)
       },
     })
@@ -64,30 +64,30 @@ const Glider = styled.span`
   transition: 0.25s ease-out;
 `
 
-interface TabProps {
+type TabProps = {
   value: string
   label?: string
-  Icon?: React.ReactNode
-  SelectedIcon?: React.ReactNode
+  IconUnchecked?: React.ReactNode
+  IconChecked?: React.ReactNode
 
   // passado pelo componente pai Tabs
-  selected?: boolean
-  onSelect?: (value: string) => void
+  checked?: boolean
+  onCheck?: (value: string) => void
 }
 export const Tab: FC<TabProps> = (props) => {
   return (
     <>
       <Input
-        checked={props.selected}
         type='radio'
         name='tabs'
         id={props.value}
-        onChange={() => (props.onSelect ? props.onSelect(props.value) : null)}
+        checked={props.checked}
+        onChange={() => (props.onCheck ? props.onCheck(props.value) : null)}
       />
       <Label htmlFor={props.value}>
-        {props.selected || !props.SelectedIcon
-          ? props.Icon
-          : props.SelectedIcon}
+        <span role='img' style={{ width: 26, height: 26 }}>
+          {props.checked ? props.IconUnchecked : props.IconChecked}
+        </span>
         {props.label}
       </Label>
     </>
@@ -110,7 +110,6 @@ const Label = styled.label`
   justify-content: center;
   width: 100%; /* FIXME: temporário */
   font-size: 1.25rem;
-  font-weight: 500;
   border-radius: ${smallerBorderRadius};
   cursor: pointer;
   transition: color 0.15s ease-in;

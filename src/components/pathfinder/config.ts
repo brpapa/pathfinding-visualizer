@@ -1,13 +1,8 @@
 import { SearchAlgoNames } from './../../algorithms/types'
-import { State } from './types'
+import { State } from '../types'
 import { GridTypeNames, AgentState, GridItemStatus } from './../../types'
 import { QTY_GRID_ITEMS } from '../grid-config'
 
-export const delayConfig = {
-  minValue: 20,
-  maxValue: 180,
-  step: 40,
-}
 
 export const initialGrid: GridTypeNames = 'triangle'
 export const initialSearchAlgo: SearchAlgoNames = 'depth-first'

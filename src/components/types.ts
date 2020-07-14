@@ -1,11 +1,14 @@
-import { GridItemStatus, AgentState, GridTypeNames } from './../../types'
+import { GridItemStatus, AgentState, GridTypeNames } from '../types'
 
 /* reducer */
+
+export type AvailButton = 'start' | 'pause' | 'continue'
+
 
 export type State = {
   gridItems: GridItemStatus[][]
   isUpdating: boolean
-  availButton: 'start' | 'pause' | 'continue'
+  availButton: AvailButton
   source: AgentState
   target: AgentState
 }
@@ -25,7 +28,7 @@ export type Action =
       }
     >
 
-/* outros */
+/* others */
 
 export type UpdatesLinkedList = {
   agentStates: AgentState[] // de um mesmo nível

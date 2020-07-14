@@ -6,12 +6,13 @@ import { GridTypeNames } from '../../algorithms/types'
 import { GridItemStatus, AgentState } from '../../types'
 import { MemoizedGridItem as GridItem } from '../grid-item'
 
-// TODO: seria possivel/melhor manter o gridItems como um state interno aqui?
-export const Grid: FC<{
+type GridProps = {
   type: GridTypeNames
   items: GridItemStatus[][]
   onToggleGridItem: (id: AgentState) => void
-}> = (props) => {
+}
+
+const Grid: FC<GridProps> = (props) => {
   const width = DIMENSION_GRID[props.type].width
   const height = DIMENSION_GRID[props.type].height
 
@@ -48,13 +49,15 @@ export const Grid: FC<{
   )
 }
 
+export default Grid
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
 `
 const Svg = styled.svg`
   /* width e height são estilos css, seus valores padrão são definidos pelo container que habita */
-  
+
   /* border: 1px solid rgb(120, 120, 120, 0.2); */
   /* box-shadow: 10px 10px 50px rgb(120,120,120,0.05); */
 `
