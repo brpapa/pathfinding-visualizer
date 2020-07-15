@@ -1,17 +1,19 @@
 # Pathfinding Visualizer
 
-You can view live [here](https://pathfinding.now.sh).
+A react-based visualization of a pathfinder, built without any UI library. You can view live [here](https://pathfinding.now.sh).
+
+## Concepts
 
 Each grid item represents a node in a implicit graph.
   - Each triangle is adjacent to other 3 triangles.
   - Each square is adjacent to other 4 squares.
 
-# Implemented features
+## Implemented features
 
 - [x] 2D grid types
-  - [x] triangle grid
-  - [x] square grid
-  - [ ] hexagon grid
+  - [x] Triangle Grid
+  - [x] Square Grid
+  - [ ] Hexagon Grid
 
 - [x] Search algorithms
   - [x] Depth-First Search
@@ -21,11 +23,12 @@ Each grid item represents a node in a implicit graph.
 
 - [x] Immediate response to delay change during visualization
 - [x] Draw your own wall nodes with mouse
+- [x] Persist form inputs on local storage
 - [ ] Maze generator for wall nodes
 - [ ] Drag and drop the source and target nodes
 - [ ] Folding animation on changing the node state
 
-# Installation
+## Installation
 
 In the root directory, you can run:
 
@@ -47,8 +50,3 @@ In the root directory, you can run:
 > npm run build
 ```
 
-# Usage
-
-# Contributing
-
-# Credits

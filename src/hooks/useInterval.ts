@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react'
 
 // executa callback enquanto delay não for nulo
-export function useInterval(callback: () => void, delay: number | null) {
+export default function useInterval(
+  callback: () => void,
+  delay: number | null
+) {
   const latestCallback = useRef(() => {})
   // persiste latestCallback a cada nova renderização
   useEffect(() => {

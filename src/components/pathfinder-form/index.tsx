@@ -6,49 +6,50 @@ import { GridTypeNames } from '../../algorithms/types'
 
 import data from './data'
 
+import Tabs from '../../ui/tabs'
+import Button from '../../ui/button'
 import { InputRange as Range } from '../../ui/input-range'
-import { InputButton as Button } from '../../ui/input-button'
 import { InputSelect as Select } from '../../ui/input-select'
 import { InputGroup as Group } from '../../ui/input-group'
 
-import { Tabs, Tab } from './../../ui/tabs'
 import { ReactComponent as TriangleIcon } from './../../assets/icons/triangle.svg'
 import { ReactComponent as TriangleOutlineIcon } from './../../assets/icons/triangle-outline.svg'
 import { ReactComponent as SquareIcon } from './../../assets/icons/square.svg'
 import { ReactComponent as SquareOutlineIcon } from './../../assets/icons/square-outline.svg'
 
-type ControlledInput<T> = [T, (value: T) => void]
+type StateReturn<T> = [T, (value: T) => void]
 
-type FormProps = {
-  grid: ControlledInput<GridTypeNames>
-  searchAlgo: ControlledInput<SearchAlgoNames>
-  delay: ControlledInput<number>
+type PathfinderFormProps = {
+  grid: StateReturn<GridTypeNames>
+  searchAlgo: StateReturn<SearchAlgoNames>
+  delay: StateReturn<number>
   availButton: AvailButton
   dispatch: React.Dispatch<Action>
   onStart: () => void
 }
-const Form: FC<FormProps> = (props) => {
+const PathfinderForm: FC<PathfinderFormProps> = (props) => {
   const [grid, setGrid] = props.grid
   const [searchAlgo, setSearchAlgo] = props.searchAlgo
   const [delay, setDelay] = props.delay
 
   return (
     <form
-      className='container'
-      style={{ paddingTop: '8px', paddingBottom: '14px' }}
       onSubmit={(e) => e.preventDefault()}
+      style={{ paddingTop: '8px', paddingBottom: '14px' }}
     >
       <Tabs
         defaultValue={grid}
         onChange={(value) => setGrid(value as GridTypeNames)}
       >
-        <Tab
+        <Tabs.Item
           value='triangle'
+          tooltip='View on triangle grid'
           IconUnchecked={<TriangleIcon />}
           IconChecked={<TriangleOutlineIcon />}
         />
-        <Tab
+        <Tabs.Item
           value='square'
+          tooltip='View on square grid'
           IconUnchecked={<SquareIcon />}
           IconChecked={<SquareOutlineIcon />}
         />
@@ -57,9 +58,7 @@ const Form: FC<FormProps> = (props) => {
         <Select
           defaultValue={searchAlgo}
           title='pick a search algorithm'
-          onChange={(e) =>
-            setSearchAlgo(e.target.value as SearchAlgoNames)
-          }
+          onChange={(e) => setSearchAlgo(e.target.value as SearchAlgoNames)}
           options={Object.entries(data).map(([key, value]) => [
             key,
             value.name,
@@ -94,12 +93,12 @@ const Form: FC<FormProps> = (props) => {
       <Group>
         <Button
           label='Reset'
-          title='Clear all nodes, except the source and target'
+          tooltip='Clear all nodes, except the source and target'
           onClick={() => props.dispatch({ type: 'reset', payload: { grid } })}
         />
         <Button
           label='Clear'
-          title='Clear all nodes, except walls, source and target'
+          tooltip='Clear all nodes, except walls, source and target'
           onClick={() => props.dispatch({ type: 'clear' })}
         />
       </Group>
@@ -107,4 +106,4 @@ const Form: FC<FormProps> = (props) => {
   )
 }
 
-export default Form
+export default PathfinderForm

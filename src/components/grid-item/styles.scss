@@ -9,9 +9,15 @@ $color-wall: #333333;
 $color-source: #ff8c5f;
 $color-target: #e85a7e;
 
+// testar
+$color-wall: #7F6DBE;
+$color-visited: #FFB0BB;
+$color-solution: #DB7DA8;
+
 .node {
   stroke-width: 1;
-  stroke: rgba(195, 195, 195, 0.4);
+  // stroke: rgba(195, 195, 195, 0.4);
+  stroke: rgb(237, 237, 237);
 
   // transition: fill 0.3s ease-in-out 0s;
 

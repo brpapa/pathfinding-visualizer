@@ -1,0 +1,32 @@
+*[data-tooltip] {
+  position: relative;
+  --tooltip-scale: 0;
+
+  // main box
+  &::before {
+    content: attr(data-tooltip);
+    background-color: rgb(0, 0, 0);
+    color: white;
+    padding: 0.4em 0.5em;
+    border-radius: 0.5em;
+    text-align: center;
+    font-size: 13px; // FIXME: hardcode
+
+    position: absolute;
+    top: 115%;
+    left: 50%;
+
+    width: max-content;
+    max-width: 150px;
+
+    // como se o ponto ancora da box fosse agora o ponto inferior central
+    transform: translate(-50%) scale(var(--tooltip-scale));
+    transform-origin: top center;
+    transition: 50ms transform;
+  }
+
+  &:hover {
+    --tooltip-scale: 1;
+    background-color: var(--foreground-hover);
+  }
+}

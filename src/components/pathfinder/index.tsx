@@ -1,4 +1,4 @@
-import React, { useState, useRef, useReducer, useEffect } from 'react'
+import React, { useState, useRef, useReducer, useEffect, FC } from 'react'
 
 import { UpdatesLinkedList } from '../types'
 
@@ -7,24 +7,25 @@ import {
   getInitialState,
   initialGrid,
   initialSearchAlgo,
-  initialDelay
+  initialDelay,
 } from './config'
 import { convertToUpdatesLinkedList } from './utils'
 
-import Form from '../form'
+import PathfinderForm from '../pathfinder-form'
 import Grid from '../grid'
 
 import { createSearcher } from '../../algorithms/searcher'
-import { useInterval } from '../../hooks'
+import useInterval from '../../hooks/useInterval'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
-export default () => {
+const Pathfinder: FC = () => {
   // main state
   const [state, dispatch] = useReducer(reducer, getInitialState(initialGrid))
 
   // form state (inputted by user)
-  const [grid, setGrid] = useState(initialGrid)
-  const [searchAlgo, setSearchAlgo] = useState(initialSearchAlgo)
-  const [delay, setDelay] = useState(initialDelay)
+  const [grid, setGrid] = useLocalStorage('grid', initialGrid)
+  const [searchAlgo, setSearchAlgo] = useLocalStorage('algo', initialSearchAlgo)
+  const [delay, setDelay] = useLocalStorage('delay', initialDelay)
 
   const solution = useRef({ qtyVisited: 0, cost: 0 })
   const pendingUpdate = useRef<UpdatesLinkedList>(null)
@@ -59,7 +60,7 @@ export default () => {
     const searcher = createSearcher(grid, searchAlgo, state.gridItems)
     const ans = searcher.solve(state.source, state.target)
 
-    // yes, overwrite previous solution/pendingUpdate
+    // yes, overwrite previous solution.current and pendingUpdate.current
     solution.current = {
       qtyVisited: ans.history.reduce((acc, curr) => acc + curr.length, 0),
       cost: ans.solution.reduce((acc, curr) => acc + curr.length, 0),
@@ -72,11 +73,10 @@ export default () => {
 
   return (
     <>
-      <Form
+      <PathfinderForm
         grid={[grid, setGrid]}
         searchAlgo={[searchAlgo, setSearchAlgo]}
         delay={[delay, setDelay]}
-        
         availButton={state.availButton}
         dispatch={dispatch}
         onStart={handleStart}
@@ -84,7 +84,7 @@ export default () => {
       <Grid
         type={grid}
         items={state.gridItems}
-        //TODO passar dispatch como context
+        // TODO passar dispatch como context
         onToggleGridItem={(id) =>
           dispatch({
             type: 'toggle-grid-item',
@@ -93,7 +93,7 @@ export default () => {
         }
       />
       {
-        // TODO: exibir notificacao por alguns segundos
+        // TODO: exibir notificacao no canto da tela por alguns segundos
         /* <p style={{ margin: '0 auto 13px auto', width: 'fit-content' }}>
         {
           // prettier-ignore
@@ -106,3 +106,5 @@ export default () => {
     </>
   )
 }
+
+export default Pathfinder

@@ -20,6 +20,7 @@ const GridItem: FC<GridItemProps> = (props) => {
   
   const commonChildProps = {
     className: ['node', `node-${props.status}`].join(' '),
+    'data-tooltip': `(${props.id.x}, ${props.id.y})`, // TODO
     onMouseDown: () => {
       if (props.status === 'source' || props.status === 'target') return
       // o evento mouseDown em svg é disparado depois do mouseDown em rect/polygon, por causa do bubbling, então nao usei props.getMouseIsPressed
@@ -28,11 +29,6 @@ const GridItem: FC<GridItemProps> = (props) => {
     onMouseEnter: () => {
       if (props.getMouseIsPressed()) props.onToggle(props.id)
     },
-    // TODO: exibir dados sobre o nó?
-    // onMouseOver: () => {
-    //   if (!props.getMouseIsPressed())
-    //     console.log(props.id)
-    // },
   }
 
   return (

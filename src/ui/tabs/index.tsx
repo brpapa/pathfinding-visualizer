@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 /*
   <Tabs defaultValue={'1'} onChange={(value) => console.log(value)}>
-    <Tab value='1' label='Um'/>
-    <Tab value='2' label='Dois'/>
-    <Tab value='3' label='Tres'/>
+    <Tabs.Item value='1' label='Um'/>
+    <Tabs.Item value='2' label='Dois'/>
+    <Tabs.Item value='3' label='Três'/>
   </Tabs>
 */
 
@@ -16,9 +16,13 @@ const smallerBorderRadius = '1.2em'
 type TabsProps = {
   defaultValue: string
   onChange: (value: string) => void
-  children: React.ReactElement<TabProps>[] // necessário p/ que child sejá válido dentro de React.Children.map
+  children: React.ReactElement<TabItemProps>[] // necessário p/ que child sejá válido dentro de React.Children.map
 }
-export const Tabs: FC<TabsProps> = ({ defaultValue, onChange, children }) => {
+export const Tabs: FC<TabsProps> & { Item: FC<TabItemProps> } = ({
+  defaultValue,
+  onChange,
+  children,
+}) => {
   const [value, setValue] = useState(defaultValue)
 
   useEffect(() => {
@@ -64,8 +68,9 @@ const Glider = styled.span`
   transition: 0.25s ease-out;
 `
 
-type TabProps = {
+type TabItemProps = {
   value: string
+  tooltip?: string
   label?: string
   IconUnchecked?: React.ReactNode
   IconChecked?: React.ReactNode
@@ -74,7 +79,7 @@ type TabProps = {
   checked?: boolean
   onCheck?: (value: string) => void
 }
-export const Tab: FC<TabProps> = (props) => {
+export const TabItem: FC<TabItemProps> = (props) => {
   return (
     <>
       <Input
@@ -84,7 +89,7 @@ export const Tab: FC<TabProps> = (props) => {
         checked={props.checked}
         onChange={() => (props.onCheck ? props.onCheck(props.value) : null)}
       />
-      <Label htmlFor={props.value}>
+      <Label htmlFor={props.value} data-tooltip={props.tooltip}>
         <span role='img' style={{ width: 26, height: 26 }}>
           {props.checked ? props.IconUnchecked : props.IconChecked}
         </span>
@@ -98,7 +103,6 @@ const Input = styled.input`
 
   &:checked {
     & + label {
-      background-color: var(--secondary); /* FIXME: temporário */
       color: var(--primary);
     }
   }
@@ -114,3 +118,6 @@ const Label = styled.label`
   cursor: pointer;
   transition: color 0.15s ease-in;
 `
+
+Tabs.Item = TabItem
+export default Tabs
