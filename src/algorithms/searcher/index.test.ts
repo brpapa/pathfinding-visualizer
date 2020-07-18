@@ -11,6 +11,7 @@ describe('searchers for a square grid', () => {
     const dfs = createSearcher('square', 'depth-first', visitable)
 
     expect(dfs.solve({ x: 0, y: 0 }, { x: 2, y: 2 }).solution).toEqual([
+      [{ x: 0, y: 0 }],
       [{ x: 1, y: 0 }],
       [{ x: 2, y: 0 }],
       [{ x: 3, y: 0 }],
@@ -39,6 +40,7 @@ describe('searchers for a square grid', () => {
 
     const ans = bfs.solve({ x: 0, y: 0 }, { x: 4, y: 4 })
     expect(ans.solution).toEqual([
+      [{ x: 0, y: 0 }],
       [{ x: 0, y: 1 }],
       [{ x: 0, y: 2 }],
       [{ x: 0, y: 3 }],

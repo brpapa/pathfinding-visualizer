@@ -1,10 +1,10 @@
 import { UpdatesLinkedList } from '../types'
 import { AgentState } from './../../types'
 
-export const convertToUpdatesLinkedList = (
+export function convertToUpdatesLinkedList(
   visited: AgentState[][],
   solution: AgentState[][]
-): UpdatesLinkedList => {
+) {
   if (visited.length === 0) return null
 
   let tail: UpdatesLinkedList = {

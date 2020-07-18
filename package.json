@@ -6,9 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test:unit": "jest --no-cache",
-    "eject": "react-scripts eject"
+    "test:unit": "jest --no-cache"
   },
   "dependencies": {
     "react": "^16.12.0",

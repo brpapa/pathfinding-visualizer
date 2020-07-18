@@ -15,5 +15,3 @@ export type GridItemStatus =
   | 'visited'
   | 'solution'
   | 'wall'
-  | 'source'
-  | 'target'

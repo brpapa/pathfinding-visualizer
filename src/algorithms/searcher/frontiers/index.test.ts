@@ -1,4 +1,4 @@
-import { getCreateFrontier } from '.'
+import { getCreateFrontier } from './index'
 
 describe('DFS frontier', () => {
   const f = getCreateFrontier('depth-first')({})
@@ -39,7 +39,7 @@ describe('BFS frontier', () => {
 })
 
 describe('GBFS frontier', () => {
-  const f = getCreateFrontier('greedy best-first')({ target: { x: 4, y: 4 } })
+  const f = getCreateFrontier('greedy-best-first')({ target: { x: 4, y: 4 } })
 
   test('add', () => {
     f.add({ state: { x: 0, y: 0 }, cost: 0 })

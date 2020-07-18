@@ -51,7 +51,7 @@ export class Queue<T> extends DataStructure<T> {
   }
 }
 export class BinaryHeap<T> extends DataStructure<T> {
-  // convenção de nome dos nós: u -> v (u é pai e v é filho)
+  // convenção de nome dos nós: se u -> v (u é pai e v é filho)
 
   /**
    * se eu quero maximizar, cmp(1, 2) deve retornar false, por exemplo

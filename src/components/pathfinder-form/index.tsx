@@ -1,21 +1,23 @@
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
+import styled from 'styled-components'
 
 import { AvailButton, Action } from './../types'
 import { SearchAlgoNames } from './../../types'
 import { GridTypeNames } from '../../algorithms/types'
 
 import data from './data'
+import { DispatchContext } from '../contexts'
 
 import Tabs from '../../ui/tabs'
 import Button from '../../ui/button'
-import { InputRange as Range } from '../../ui/input-range'
-import { InputSelect as Select } from '../../ui/input-select'
-import { InputGroup as Group } from '../../ui/input-group'
+import Select from '../../ui/select'
 
-import { ReactComponent as TriangleIcon } from './../../assets/icons/triangle.svg'
+import { ReactComponent as TriangleSolidIcon } from './../../assets/icons/triangle-solid.svg'
 import { ReactComponent as TriangleOutlineIcon } from './../../assets/icons/triangle-outline.svg'
-import { ReactComponent as SquareIcon } from './../../assets/icons/square.svg'
+import { ReactComponent as SquareSolidIcon } from './../../assets/icons/square-solid.svg'
 import { ReactComponent as SquareOutlineIcon } from './../../assets/icons/square-outline.svg'
+import { ReactComponent as PlayIcon } from './../../assets/icons/play-circle.svg'
+import { ReactComponent as PauseIcon } from './../../assets/icons/pause-circle.svg'
 
 type StateReturn<T> = [T, (value: T) => void]
 
@@ -24,7 +26,6 @@ type PathfinderFormProps = {
   searchAlgo: StateReturn<SearchAlgoNames>
   delay: StateReturn<number>
   availButton: AvailButton
-  dispatch: React.Dispatch<Action>
   onStart: () => void
 }
 const PathfinderForm: FC<PathfinderFormProps> = (props) => {
@@ -32,11 +33,10 @@ const PathfinderForm: FC<PathfinderFormProps> = (props) => {
   const [searchAlgo, setSearchAlgo] = props.searchAlgo
   const [delay, setDelay] = props.delay
 
+  const { dispatch } = useContext(DispatchContext)
+
   return (
-    <form
-      onSubmit={(e) => e.preventDefault()}
-      style={{ paddingTop: '8px', paddingBottom: '14px' }}
-    >
+    <Form onSubmit={(e) => e.preventDefault()}>
       <Tabs
         defaultValue={grid}
         onChange={(value) => setGrid(value as GridTypeNames)}
@@ -44,20 +44,24 @@ const PathfinderForm: FC<PathfinderFormProps> = (props) => {
         <Tabs.Item
           value='triangle'
           tooltip='View on triangle grid'
-          IconUnchecked={<TriangleIcon />}
-          IconChecked={<TriangleOutlineIcon />}
+          Icon={{
+            checked: <TriangleSolidIcon />,
+            unchecked: <TriangleOutlineIcon />,
+          }}
         />
         <Tabs.Item
           value='square'
           tooltip='View on square grid'
-          IconUnchecked={<SquareIcon />}
-          IconChecked={<SquareOutlineIcon />}
+          Icon={{
+            checked: <SquareSolidIcon />,
+            unchecked: <SquareOutlineIcon />,
+          }}
         />
       </Tabs>
-      <Group>
+      <div>
         <Select
           defaultValue={searchAlgo}
-          title='pick a search algorithm'
+          // tooltip='Pick a search algorithm'
           onChange={(e) => setSearchAlgo(e.target.value as SearchAlgoNames)}
           options={Object.entries(data).map(([key, value]) => [
             key,
@@ -65,45 +69,68 @@ const PathfinderForm: FC<PathfinderFormProps> = (props) => {
           ])}
         />
         {props.availButton === 'start' && (
-          <Button primary label='start' onClick={props.onStart} />
+          <Button
+            primary
+            tooltip='Start'
+            Icon={<PlayIcon />}
+            onClick={props.onStart}
+          />
         )}
         {props.availButton === 'continue' && (
           <Button
             primary
-            label='continue'
-            onClick={() => props.dispatch({ type: 'continue' })}
+            tooltip='Continue'
+            Icon={<PlayIcon />}
+            onClick={() => dispatch({ type: 'continue' })}
           />
         )}
         {props.availButton === 'pause' && (
           <Button
             primary
-            label='pause'
-            onClick={() => props.dispatch({ type: 'pause' })}
+            tooltip='Pause'
+            Icon={<PauseIcon />}
+            onClick={() => dispatch({ type: 'pause' })}
           />
         )}
-      </Group>
-      <Range
-        minValue={20}
-        maxValue={180}
-        step={40}
-        value={delay}
-        label='delay'
-        onChange={(e) => setDelay(Number(e.target.value))}
-      />
-      <Group>
+      </div>
+      <Tabs
+        defaultValue={String(delay)}
+        onChange={(value) => setDelay(Number(value))}
+      >
+        <Tabs.Item
+          value={'20'}
+          label='Fast'
+          tooltip='Speed up the visualization'
+        />
+        <Tabs.Item value={'100'} label='Normal' />
+        <Tabs.Item
+          value={'180'}
+          label='Slow'
+          tooltip='Speed down the visualization'
+        />
+      </Tabs>
+      <div>
         <Button
           label='Reset'
-          tooltip='Clear all nodes, except the source and target'
-          onClick={() => props.dispatch({ type: 'reset', payload: { grid } })}
+          tooltip='Clear grid'
+          onClick={() => dispatch({ type: 'reset', payload: { grid } })}
         />
         <Button
           label='Clear'
-          tooltip='Clear all nodes, except walls, source and target'
-          onClick={() => props.dispatch({ type: 'clear' })}
+          tooltip='Clear path'
+          onClick={() => dispatch({ type: 'clear' })}
         />
-      </Group>
-    </form>
+      </div>
+    </Form>
   )
 }
+
+const Form = styled.form`
+  padding: 8px 0 14px 0;
+  margin: 0 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
 
 export default PathfinderForm

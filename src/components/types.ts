@@ -4,7 +4,6 @@ import { GridItemStatus, AgentState, GridTypeNames } from '../types'
 
 export type AvailButton = 'start' | 'pause' | 'continue'
 
-
 export type State = {
   gridItems: GridItemStatus[][]
   isUpdating: boolean
@@ -19,14 +18,15 @@ type ActWithPayload<T, P> = Act<T> & { payload: P }
 export type Action =
   | Act<'pause' | 'continue' | 'clear' | 'stop'>
   | ActWithPayload<'reset', { grid: GridTypeNames }>
-  | ActWithPayload<'toggle-grid-item', { id: AgentState }>
+  | ActWithPayload<'set', { gridItems: GridItemStatus[][] }>
   | ActWithPayload<
-      'update-grid-items',
+      'update',
       {
         agentStates: AgentState[]
         newStatus: GridItemStatus
       }
     >
+  | ActWithPayload<'toggle', { agentState: AgentState }>
 
 /* others */
 

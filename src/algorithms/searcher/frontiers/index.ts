@@ -16,16 +16,16 @@ export class Frontier {
     private ds: TDataStructure<NodeFrontier> // ds: instância de uma DataStructure, pois ela precisa ser intância fora dessa classe, já que existem estruturas com construtores diferentes
   ) {}
 
-  add(item: NodeFrontier): void {
+  add(item: NodeFrontier) {
     this.ds.push(item)
   }
-  next(): NodeFrontier | undefined {
+  next() {
     return this.ds.top()
   }
-  remove(): void {
+  remove() {
     this.ds.pop()
   }
-  empty(): boolean {
+  empty() {
     return this.ds.empty()
   }
 }
@@ -43,11 +43,11 @@ export function getCreateFrontier(searchAlgo: SearchAlgoNames) {
       return new Frontier(new Queue<NodeFrontier>())
     },
     // TODO: testar
-    'greedy best-first': ({ target }) => {
+    'greedy-best-first': ({ target }) => {
       if (!target) throw Error('target must be defined')
 
       const h = heuristics['manhattan-distance']
-      const f = (node: NodeFrontier) => h(node.state, target)
+      const f = (node: NodeFrontier) => h(node!.state, target)
 
       return new Frontier(new BinaryHeap<NodeFrontier>((a, b) => f(a) < f(b)))
     },
@@ -56,7 +56,7 @@ export function getCreateFrontier(searchAlgo: SearchAlgoNames) {
       if (!target) throw Error('target must be defined')
 
       const h = heuristics['manhattan-distance']
-      const f = (node: NodeFrontier) => node.cost + h(node.state, target)
+      const f = (node: NodeFrontier) => node!.cost + h(node!.state, target)
 
       return new Frontier(new BinaryHeap<NodeFrontier>((a, b) => f(a) < f(b)))
     },

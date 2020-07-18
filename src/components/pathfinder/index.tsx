@@ -1,4 +1,4 @@
-import React, { useState, useRef, useReducer, useEffect, FC } from 'react'
+import React, { useRef, useReducer, useEffect, FC } from 'react'
 
 import { UpdatesLinkedList } from '../types'
 
@@ -15,8 +15,12 @@ import PathfinderForm from '../pathfinder-form'
 import Grid from '../grid'
 
 import { createSearcher } from '../../algorithms/searcher'
+import { generatePattern } from '../../algorithms/pattern-generator'
 import useInterval from '../../hooks/useInterval'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import Button from '../../ui/button'
+
+import { DispatchContext } from './../contexts'
 
 const Pathfinder: FC = () => {
   // main state
@@ -24,7 +28,11 @@ const Pathfinder: FC = () => {
 
   // form state (inputted by user)
   const [grid, setGrid] = useLocalStorage('grid', initialGrid)
-  const [searchAlgo, setSearchAlgo] = useLocalStorage('algo', initialSearchAlgo)
+  const [searchAlgo, setSearchAlgo] = useLocalStorage(
+    'search-algo',
+    initialSearchAlgo
+  )
+  // const [pattern, setPattern] = useLocalStorage('maze', initialMazeAlgo)
   const [delay, setDelay] = useLocalStorage('delay', initialDelay)
 
   const solution = useRef({ qtyVisited: 0, cost: 0 })
@@ -40,7 +48,7 @@ const Pathfinder: FC = () => {
       }
 
       dispatch({
-        type: 'update-grid-items',
+        type: 'update',
         payload: update,
       })
       pendingUpdate.current = update.next
@@ -53,45 +61,53 @@ const Pathfinder: FC = () => {
     dispatch({ type: 'reset', payload: { grid } })
   }, [grid])
 
-  function handleStart() {
+  function handleSearchStart() {
     dispatch({ type: 'clear' })
     dispatch({ type: 'continue' })
 
     const searcher = createSearcher(grid, searchAlgo, state.gridItems)
-    const ans = searcher.solve(state.source, state.target)
+    const res = searcher.solve(state.source, state.target)
 
     // yes, overwrite previous solution.current and pendingUpdate.current
-    solution.current = {
-      qtyVisited: ans.history.reduce((acc, curr) => acc + curr.length, 0),
-      cost: ans.solution.reduce((acc, curr) => acc + curr.length, 0),
-    }
     pendingUpdate.current = convertToUpdatesLinkedList(
-      ans.history,
-      ans.solution
+      res.history,
+      res.solution
     )
+    solution.current = {
+      qtyVisited: res.history.reduce((acc, curr) => acc + curr.length, 0),
+      cost: res.solution.reduce((acc, curr) => acc + curr.length, 0),
+    }
+  }
+
+  // FIXME: grid square com basic random pattern ta travando
+  function handlePatternGenerate() {
+    const gridItems = generatePattern(
+      grid,
+      'perfect-maze-recursive-backtracking',
+      state.gridItems.length,
+      state.gridItems[0].length
+    )
+    dispatch({ type: 'set', payload: { gridItems } })
   }
 
   return (
     <>
-      <PathfinderForm
-        grid={[grid, setGrid]}
-        searchAlgo={[searchAlgo, setSearchAlgo]}
-        delay={[delay, setDelay]}
-        availButton={state.availButton}
-        dispatch={dispatch}
-        onStart={handleStart}
-      />
-      <Grid
-        type={grid}
-        items={state.gridItems}
-        // TODO passar dispatch como context
-        onToggleGridItem={(id) =>
-          dispatch({
-            type: 'toggle-grid-item',
-            payload: { id },
-          })
-        }
-      />
+      <Button label={'Pattern'} onClick={handlePatternGenerate} />
+      <DispatchContext.Provider value={{ dispatch }}>
+        <PathfinderForm
+          grid={[grid, setGrid]}
+          searchAlgo={[searchAlgo, setSearchAlgo]}
+          delay={[delay, setDelay]}
+          availButton={state.availButton}
+          onStart={handleSearchStart}
+        />
+        <Grid
+          type={grid}
+          items={state.gridItems}
+          source={state.source}
+          target={state.target}
+        />
+      </DispatchContext.Provider>
       {
         // TODO: exibir notificacao no canto da tela por alguns segundos
         /* <p style={{ margin: '0 auto 13px auto', width: 'fit-content' }}>

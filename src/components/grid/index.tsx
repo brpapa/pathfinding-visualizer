@@ -1,15 +1,16 @@
-import React, { FC, useRef, useCallback } from 'react'
+import React, { FC, useRef, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 
 import { DIMENSION_GRID } from '../grid-config'
-import { GridTypeNames } from '../../algorithms/types'
-import { GridItemStatus, AgentState } from '../../types'
-import { MemoizedGridItem as GridItem } from '../grid-item'
+import { GridTypeNames, AgentState } from '../../algorithms/types'
+import { GridItemStatus } from '../../types'
+import GridItem from '../grid-item'
 
 type GridProps = {
   type: GridTypeNames
   items: GridItemStatus[][]
-  onToggleGridItem: (id: AgentState) => void
+  source: AgentState
+  target: AgentState
 }
 
 const Grid: FC<GridProps> = (props) => {
@@ -17,13 +18,13 @@ const Grid: FC<GridProps> = (props) => {
   const height = DIMENSION_GRID[props.type].height
 
   const mouseIsPressed = useRef(false)
-  const memoizedGetMouseIsPressed = useCallback(
+  const memoizedMouseIsPressed = useCallback(
     () => mouseIsPressed.current,
     []
   )
 
   return (
-    <Container>
+    <Wrapper>
       <Svg
         viewBox={`0 0 ${width} ${height}`}
         width={width}
@@ -39,25 +40,28 @@ const Grid: FC<GridProps> = (props) => {
               id={{ x, y }}
               grid={props.type}
               status={item}
-              getMouseIsPressed={memoizedGetMouseIsPressed}
-              onToggle={props.onToggleGridItem} // TODO: precisaria memorizar no componente pai (Pathfinder)?
+              isSourceOrTarget={(() => {
+                if (JSON.stringify({ x, y }) === JSON.stringify(props.source)) return 'source'
+                if (JSON.stringify({ x, y }) === JSON.stringify(props.target)) return 'target'
+                return null
+              })()}
+              mouseIsPressed={memoizedMouseIsPressed}
             />
           ))
         )}
       </Svg>
-    </Container>
+    </Wrapper>
   )
 }
 
 export default Grid
 
-const Container = styled.div`
+const Wrapper = styled.div`
   display: flex;
   justify-content: center;
 `
 const Svg = styled.svg`
   /* width e height são estilos css, seus valores padrão são definidos pelo container que habita */
 
-  /* border: 1px solid rgb(120, 120, 120, 0.2); */
-  /* box-shadow: 10px 10px 50px rgb(120,120,120,0.05); */
+  box-shadow: 10px 10px 50px rgb(120, 120, 120, 0.05);
 `

@@ -8,7 +8,7 @@ Each grid item represents a node in a implicit graph.
   - Each triangle is adjacent to other 3 triangles.
   - Each square is adjacent to other 4 squares.
 
-## Implemented features
+## Features
 
 - [x] 2D grid types
   - [x] Triangle Grid
@@ -21,10 +21,15 @@ Each grid item represents a node in a implicit graph.
   - [x] Greedy Best-First Search
   - [x] A\* Search
 
+- [ ] Pattern generation algorithms
+  - [ ] Perfect mazes
+    - [ ] Recursive backtracking
+  - [ ] Basic random
+
+- [x] View, pause or continue the visualization
 - [x] Immediate response to delay change during visualization
 - [x] Draw your own wall nodes with mouse
 - [x] Persist form inputs on local storage
-- [ ] Maze generator for wall nodes
 - [ ] Drag and drop the source and target nodes
 - [ ] Folding animation on changing the node state
 

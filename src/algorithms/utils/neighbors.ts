@@ -1,18 +1,33 @@
 import { AgentState, GridTypeNames } from '../../types'
 
 // todos os próximos movimento no sentido anti-horário
-const actions = ({ x, y }: AgentState) => [
-  { x: x, y: y - 1 },
-  { x: x - 1, y: y },
-  { x: x, y: y + 1 },
-  { x: x + 1, y: y },
-]
+const actions = ({ x, y }: AgentState, k: number) => {
+  const base = [
+    { x: x, y: y - k },
+    { x: x - k, y: y },
+    { x: x, y: y + k },
+    { x: x + k, y: y },
+  ]
+
+  return base
+  // return !allowDiagonal
+  //   ? base
+  //   : base.concat([
+  //       { x: x + k, y: y - k },
+  //       { x: x + k, y: y + k },
+  //       { x: x - k, y: y - k },
+  //       { x: x - k, y: y + k },
+  //     ])
+}
 
 /**
- * @description retorna um objeto de funções que têm em seus escopos o acesso à matriz visitable, indexadas por um grid type
  * @param visitable - visitable[x][y] diz se o item de id (x, y) é visitável ou não
  */
-export function createNeighbors(grid: GridTypeNames, visitable: boolean[][]) {
+export function createNeighbors(
+  grid: GridTypeNames,
+  visitable: boolean[][],
+  k: number = 1
+) {
   const min = { x: 0, y: 0 }
   const max = {
     x: visitable.length - 1,
@@ -21,7 +36,7 @@ export function createNeighbors(grid: GridTypeNames, visitable: boolean[][]) {
 
   const neighborsByGrid = {
     triangle: (triangle: AgentState) =>
-      actions(triangle).filter(
+      actions(triangle, k).filter(
         (t) =>
           t.x >= min.x &&
           t.x <= max.x &&
@@ -32,7 +47,7 @@ export function createNeighbors(grid: GridTypeNames, visitable: boolean[][]) {
           (t.x === triangle.x - 1 ? (triangle.x + triangle.y) % 2 === 1 : 1)
       ),
     square: (square: AgentState) =>
-      actions(square).filter(
+      actions(square, k).filter(
         (s) =>
           s.x >= min.x &&
           s.x <= max.x &&

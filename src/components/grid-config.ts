@@ -1,11 +1,11 @@
 import { GridTypeNames } from '../types'
 
-type TForEachGrid<T> = { [K in GridTypeNames]: T }
-type TDimension = { width: number; height: number }
+type ForEachGrid<T> = { [K in GridTypeNames]: T }
+type Dimension = { width: number; height: number }
 
 // TODO: re-renderizar o svg quando ela mudar para suportar um resize da tela em runtime, mas lembre-se que quem depende dessas contantes são: pathfinder/config, grid/index, grid-item/utils; usar useContext?
 
-const SIDE_GRID_ITEM: TForEachGrid<number> = {
+const SIDE_GRID_ITEM: ForEachGrid<number> = {
   triangle: 60, // pixels
   square: 36, // pixels
 }
@@ -19,7 +19,7 @@ const availHeight = window.innerHeight - 80 // FIXME: hardcode
 const fit = (a: number, b: number) => a - (a % b)
 
 // largura (variacao do x) e altura (variacao do y) de cada item
-const DIMENSION_GRID_ITEM: TForEachGrid<TDimension> = {
+const DIMENSION_GRID_ITEM: ForEachGrid<Dimension> = {
   triangle: {
     width: (SIDE_GRID_ITEM.triangle * Math.sqrt(3)) / 2,
     height: SIDE_GRID_ITEM.triangle / 2,
@@ -31,7 +31,7 @@ const DIMENSION_GRID_ITEM: TForEachGrid<TDimension> = {
 }
 
 // largura e altura total de cada grid
-const DIMENSION_GRID: TForEachGrid<TDimension> = {
+const DIMENSION_GRID: ForEachGrid<Dimension> = {
   triangle: {
     width: fit(availWidth, DIMENSION_GRID_ITEM.triangle.width),
     height: fit(availHeight, DIMENSION_GRID_ITEM.triangle.height),
@@ -43,7 +43,7 @@ const DIMENSION_GRID: TForEachGrid<TDimension> = {
 }
 
 // qte de itens na largura e na altura em cada grid
-const QTY_GRID_ITEMS: TForEachGrid<TDimension> = {
+const QTY_GRID_ITEMS: ForEachGrid<Dimension> = {
   // divisoes exatas
   triangle: {
     width: DIMENSION_GRID.triangle.width / DIMENSION_GRID_ITEM.triangle.width,

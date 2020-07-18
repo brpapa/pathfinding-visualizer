@@ -1,8 +1,8 @@
-import { AgentState, GridItemStatus } from '../../types'
+import { AgentState } from '../../types'
 import { SIDE_GRID_ITEM } from '../grid-config'
 
 // retorna a altura de um triangulo equilátero
-function triangleHeight(side: number): number {
+function triangleHeight(side: number) {
   return (side * Math.sqrt(3)) / 2
 }
 

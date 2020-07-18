@@ -1,6 +1,8 @@
 // TODO: https://codepen.io/brnpapa/pen/xxZwPgE
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useState } from 'react'
 import styled from 'styled-components'
+
+import './../tooltip.scss'
 
 /*
   <Tabs defaultValue={'1'} onChange={(value) => console.log(value)}>
@@ -10,70 +12,44 @@ import styled from 'styled-components'
   </Tabs>
 */
 
-const biggerBorderRadius = '1.6em'
-const smallerBorderRadius = '1.2em'
-
 type TabsProps = {
   defaultValue: string
   onChange: (value: string) => void
   children: React.ReactElement<TabItemProps>[] // necessário p/ que child sejá válido dentro de React.Children.map
 }
-export const Tabs: FC<TabsProps> & { Item: FC<TabItemProps> } = ({
-  defaultValue,
-  onChange,
-  children,
-}) => {
-  const [value, setValue] = useState(defaultValue)
-
-  useEffect(() => {
-    onChange(value)
-  }, [value, onChange])
+export const Tabs: FC<TabsProps> & { Item: FC<TabItemProps> } = (props) => {
+  const [checkedValue, setCheckedValue] = useState(props.defaultValue)
 
   // adiciona novas props em todos os filhos, antes de renderizá-los
-  const childElements = React.Children.map(children, (child) =>
+  const childElements = React.Children.map(props.children, (child) =>
     React.cloneElement(child, {
-      checked: child.props.value === value,
+      checked: child.props.value === checkedValue,
       onCheck: (value: string) => {
-        setValue(value)
+        setCheckedValue(value)
+        props.onChange(value)
       },
     })
   )
 
-  return (
-    <Wrapper>
-      {childElements}
-      {/* <Glider /> */}
-    </Wrapper>
-  )
+  return <Wrapper>{childElements}</Wrapper>
 }
 const Wrapper = styled.div`
   display: flex;
   position: relative;
   background-color: #fff;
-  height: 45px;
-  padding: 0.3rem;
-  border-radius: ${biggerBorderRadius};
+  height: var(--form-item-height);
+  border-radius: var(--border-radius);
   border: var(--border);
   * {
     z-index: 2;
   }
-`
-const Glider = styled.span`
-  position: absolute;
-  display: flex;
-  height: 54px;
-  width: 200px;
-  background-color: var(--secondary);
-  z-index: 1;
-  transition: 0.25s ease-out;
 `
 
 type TabItemProps = {
   value: string
   tooltip?: string
   label?: string
-  IconUnchecked?: React.ReactNode
-  IconChecked?: React.ReactNode
+  Icon?: { checked: React.ReactNode; unchecked: React.ReactNode }
 
   // passado pelo componente pai Tabs
   checked?: boolean
@@ -82,23 +58,23 @@ type TabItemProps = {
 export const TabItem: FC<TabItemProps> = (props) => {
   return (
     <>
-      <Input
-        type='radio'
-        name='tabs'
+      <RadioInput
         id={props.value}
         checked={props.checked}
         onChange={() => (props.onCheck ? props.onCheck(props.value) : null)}
       />
       <Label htmlFor={props.value} data-tooltip={props.tooltip}>
-        <span role='img' style={{ width: 26, height: 26 }}>
-          {props.checked ? props.IconUnchecked : props.IconChecked}
-        </span>
+        {props.Icon && (
+          <IconWrapper>
+            {props.checked ? props.Icon.checked : props.Icon.unchecked}
+          </IconWrapper>
+        )}
         {props.label}
       </Label>
     </>
   )
 }
-const Input = styled.input`
+const RadioInput = styled.input.attrs({ type: 'radio' })`
   display: none;
 
   &:checked {
@@ -112,11 +88,21 @@ const Label = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%; /* FIXME: temporário */
-  font-size: 1.25rem;
-  border-radius: ${smallerBorderRadius};
+
+  min-width: 70px;
+  color: black;
+  font-size: 14px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: color 0.15s ease-in;
+  transition: color 50ms ease-in;
+
+  &:hover {
+    background-color: var(--foreground-hover);
+  }
+`
+const IconWrapper = styled.span.attrs({ role: 'img' })`
+  width: 22px;
+  height: 22px;
 `
 
 Tabs.Item = TabItem
