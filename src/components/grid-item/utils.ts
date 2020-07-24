@@ -1,8 +1,16 @@
 import { AgentState } from '../../types'
 import { SIDE_GRID_ITEM } from '../grid-config'
 
+export function triangleSide() {
+  return SIDE_GRID_ITEM.triangle
+}
+
+export function squareSide() {
+  return SIDE_GRID_ITEM.square
+}
+
 // retorna a altura de um triangulo equilátero
-function triangleHeight(side: number) {
+export function triangleHeight(side: number) {
   return (side * Math.sqrt(3)) / 2
 }
 
@@ -10,14 +18,14 @@ function triangleHeight(side: number) {
 export function trianglePoints(id: AgentState) {
   const anchorPointOfTriangle00 = {
     x: 0,
-    y: SIDE_GRID_ITEM.triangle / 2,
+    y: triangleSide() / 2,
   }
   const to = (id.x + id.y) % 2 === 0 ? 'rightward' : 'leftward'
-  const h = triangleHeight(SIDE_GRID_ITEM.triangle)
+  const h = triangleHeight(triangleSide())
 
   const anchorPoint = {
     x: anchorPointOfTriangle00.x + h * (to === 'leftward' ? id.x + 1 : id.x),
-    y: anchorPointOfTriangle00.y + SIDE_GRID_ITEM.triangle * (id.y / 2),
+    y: anchorPointOfTriangle00.y + triangleSide() * (id.y / 2),
   }
 
   // a partir do seu anchor point e orientação (to)
@@ -34,11 +42,8 @@ export function squareAnchorPoint(id: AgentState) {
   const anchorPointOfSquare00 = { x: 0, y: 0 }
 
   return {
-    x: id.x * SIDE_GRID_ITEM.square + anchorPointOfSquare00.x,
-    y: id.y * SIDE_GRID_ITEM.square + anchorPointOfSquare00.y,
+    x: id.x * squareSide() + anchorPointOfSquare00.x,
+    y: id.y * squareSide() + anchorPointOfSquare00.y,
   }
 }
 
-export function squareSide() {
-  return SIDE_GRID_ITEM.square
-}

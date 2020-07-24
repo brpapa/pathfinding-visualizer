@@ -15,35 +15,40 @@ type ButtonProps = {
 const Button: FC<ButtonProps> = (props) => {
   return (
     <StyledButton
+      primary={props.primary}
       disabled={props.disabled}
       data-tooltip={props.tooltip}
       onClick={props.onClick}
     >
-      {/* FIXME */}
-      {props.Icon && <IconWrapper>{props.Icon}</IconWrapper>}
-      {props.label}
+      <Label>
+        {/* FIXME */}
+        {props.Icon && props.Icon}
+        {props.label}
+      </Label>
     </StyledButton>
   )
 }
 
+type StyledButtonProps = {
+  primary?: boolean
+}
 const StyledButton = styled.button`
   user-select: none;
   text-decoration: none;
-  /* text-align: center; */
+  text-align: center;
 
   font-size: 14px;
   height: var(--form-item-height);
-  padding: 0.35em 1.2em;
+  padding: 0 0.5em;
   border-radius: var(--border-radius);
-
-  /* color: #fff; */
-  color: var(--text-color);
-
-  /* background-color: #000; */
-  background-color: var(--foreground);
-
-  border: 0.05em solid var(--foreground-accent);
   cursor: pointer;
+
+  border: ${({ primary }: StyledButtonProps) =>
+    primary ? 'none' : 'var(--border)'};
+  color: ${({ primary }: StyledButtonProps) =>
+    primary ? '#fff' : 'var(--text-color)'};
+  background-color: ${({ primary }: StyledButtonProps) =>
+    primary ? '#000' : 'var(--foreground)'};
 
   &:focus {
     outline: 0;
@@ -53,15 +58,16 @@ const StyledButton = styled.button`
     background-color: var(--foreground-hover);
   }
 `
-const IconWrapper = styled.span.attrs({ role: 'img' })`
+const Label = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  fill: black;
-  width: 22px;
-  height: 22px;
+  cursor: pointer;
 `
-
+// const IconWrapper = styled.span.attrs({ role: 'img' })`
+//   fill: black;
+//   width: 22px;
+//   height: 22px;
+// `
 
 export default Button

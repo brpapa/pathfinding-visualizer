@@ -9,7 +9,7 @@ const App: FC = () => {
   return (
     <Wrapper>
       <GithubCorner
-        size={60}
+        size={50}
         href='https://github.com/brnpapa/pathfinding-visualizer'
       />
       <Pathfinder />
@@ -19,10 +19,8 @@ const App: FC = () => {
 }
 
 const Wrapper = styled.div`
-  max-height: 100vh;
-  max-width: 100vw;
-  width: 100%;
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
 
   background: var(--background);
   font-family: 'Inter', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;

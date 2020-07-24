@@ -33,11 +33,12 @@ const StyledSelect = styled.select`
   height: var(--form-item-height);
   width: fit-content;
   padding: 0.35em 1.2em;
+  
+  border: var(--border);
   border-radius: var(--border-radius);
 
   color: var(--text-color);
   background-color: var(--foreground);
 
-  border: 0.05em solid var(--foreground-accent);
 `
 export default Select

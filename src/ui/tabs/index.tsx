@@ -15,9 +15,9 @@ import './../tooltip.scss'
 type TabsProps = {
   defaultValue: string
   onChange: (value: string) => void
-  children: React.ReactElement<TabItemProps>[] // necessário p/ que child sejá válido dentro de React.Children.map
+  children: React.ReactElement<TabsItemProps>[] // necessário p/ que child sejá válido dentro de React.Children.map
 }
-export const Tabs: FC<TabsProps> & { Item: FC<TabItemProps> } = (props) => {
+export const Tabs: FC<TabsProps> & { Item: FC<TabsItemProps> } = (props) => {
   const [checkedValue, setCheckedValue] = useState(props.defaultValue)
 
   // adiciona novas props em todos os filhos, antes de renderizá-los
@@ -45,7 +45,7 @@ const Wrapper = styled.div`
   }
 `
 
-type TabItemProps = {
+type TabsItemProps = {
   value: string
   tooltip?: string
   label?: string
@@ -55,7 +55,7 @@ type TabItemProps = {
   checked?: boolean
   onCheck?: (value: string) => void
 }
-export const TabItem: FC<TabItemProps> = (props) => {
+export const TabsItem: FC<TabsItemProps> = (props) => {
   return (
     <>
       <RadioInput
@@ -105,5 +105,5 @@ const IconWrapper = styled.span.attrs({ role: 'img' })`
   height: 22px;
 `
 
-Tabs.Item = TabItem
+Tabs.Item = TabsItem
 export default Tabs

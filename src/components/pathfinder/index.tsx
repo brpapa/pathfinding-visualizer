@@ -11,7 +11,7 @@ import {
 } from './config'
 import { convertToUpdatesLinkedList } from './utils'
 
-import PathfinderForm from '../pathfinder-form'
+import Header from '../header'
 import Grid from '../grid'
 
 import { createSearcher } from '../../algorithms/searcher'
@@ -46,7 +46,6 @@ const Pathfinder: FC = () => {
         dispatch({ type: 'stop' })
         return
       }
-
       dispatch({
         type: 'update',
         payload: update,
@@ -92,9 +91,9 @@ const Pathfinder: FC = () => {
 
   return (
     <>
-      <Button label={'Pattern'} onClick={handlePatternGenerate} />
+      {/* <Button label={'Pattern'} onClick={handlePatternGenerate} /> */}
       <DispatchContext.Provider value={{ dispatch }}>
-        <PathfinderForm
+        <Header
           grid={[grid, setGrid]}
           searchAlgo={[searchAlgo, setSearchAlgo]}
           delay={[delay, setDelay]}

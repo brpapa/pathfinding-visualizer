@@ -5,13 +5,15 @@ type Dimension = { width: number; height: number }
 
 // TODO: re-renderizar o svg quando ela mudar para suportar um resize da tela em runtime, mas lembre-se que quem depende dessas contantes são: pathfinder/config, grid/index, grid-item/utils; usar useContext?
 
+// TODO: adicionar opções +/- para mudar o tamanho do grid item (em collapse do formulario)
+
 const SIDE_GRID_ITEM: ForEachGrid<number> = {
   triangle: 60, // pixels
   square: 36, // pixels
 }
 
 const availWidth = window.innerWidth - 10
-const availHeight = window.innerHeight - 80 // FIXME: hardcode
+const availHeight = window.innerHeight - 130 // FIXME: hardcode
 
 /* */
 
